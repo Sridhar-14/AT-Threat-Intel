@@ -27,7 +27,7 @@ pipeline {
                     docker rm my-app-container || true
                     
                     # Run the new container
-                    docker run -d --name my-app-container -p 5173:5173 my-app-image:latest
+                    docker run -d --name my-app-container -p 5173:80 my-app-image:latest
                     '''
                 }
             }

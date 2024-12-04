@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  frontend:
+    image: my-vite-frontend
+    ports:
+      - "5173:80"
+    restart: always
+  backend:
+    image: my-backend-image
+    ports:
+      - "8081:8080"
+    restart: always
