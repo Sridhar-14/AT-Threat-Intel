@@ -17,25 +17,28 @@ pipeline {
                 sh 'mvn test'
             }
         }
-        stage('Start Docker') {
+        stage('Start Docker Container') {
             steps {
-                echo 'Starting Docker service...'
-                // Check Docker status and start if not running
-                sh '''
-                if ! systemctl is-active --quiet docker; then
-                    echo "Docker is not running. Starting Docker..."
-                    sudo systemctl start docker
-                else
-                    echo "Docker is already running."
-                fi
-                '''
+                script {
+                    echo 'Starting Docker container...'
+                    
+                    // Pull the Docker image if not available locally
+                    sh 'docker pull your-docker-image:tag'
+                    
+                    // Run the container
+                    sh '''
+                    docker run -d --name my-container \
+                        -p 8080:8080 \
+                        your-docker-image:tag
+                    '''
+                }
             }
         }
     }
 
     post {
         success {
-            echo 'Build completed successfully!'
+            echo 'Build completed successfully and container started!'
         }
         failure {
             echo 'Build failed. Check the logs for more details.'
