@@ -15,7 +15,7 @@ public class ApplicationTest {
     @BeforeClass
     public void setup() {
         // Set path to your ChromeDriver executable
-        System.setProperty("webdriver.chrome.driver", "C:\\path\\to\\chromedriver.exe");
+        System.setProperty("webdriver.chrome.driver", "chromedriver");
 
         // Use ChromeOptions to run in headless mode (optional)
         ChromeOptions options = new ChromeOptions();
