@@ -6,6 +6,7 @@ import org.openqa.selenium.By;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.Test;
+
 import java.util.concurrent.TimeUnit;
 
 public class ApplicationTest {
@@ -13,55 +14,61 @@ public class ApplicationTest {
 
     @BeforeClass
     public void setup() {
-        // Set path to your ChromeDriver
-        System.setProperty("webdriver.chrome.driver", "path/to/chromedriver");
+        // Set path to your ChromeDriver executable
+        System.setProperty("webdriver.chrome.driver", "C:\\path\\to\\chromedriver.exe");
 
         // Use ChromeOptions to run in headless mode (optional)
         ChromeOptions options = new ChromeOptions();
-        options.addArguments("--headless");
+        options.addArguments("--headless"); // Optional, remove if you want a visible browser
 
+        // Initialize the ChromeDriver with options
         driver = new ChromeDriver(options);
+
+        // Launch the application
         driver.get("http://localhost:5174");
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS); // Wait for elements to load
+
+        // Set implicit wait to handle dynamic loading elements
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
     @Test
     public void testAppIsRunning() {
-        // Test if the app is accessible at localhost:5174
+        // Verify if the application URL is correct
         String currentUrl = driver.getCurrentUrl();
-        Assert.assertEquals(currentUrl, "http://localhost:5174/");
+        Assert.assertEquals(currentUrl, "http://localhost:5174/", "App URL is not correct.");
     }
 
     @Test
     public void testDataGenerationHourly() {
-        // You can check for a specific element that updates hourly (for example, last data timestamp)
+        // Check for a specific element (e.g., timestamp) that updates hourly
         String lastDataTimestamp = driver.findElement(By.id("last-data-timestamp")).getText();
 
-        // Assuming you can capture the timestamp of the last data update, and check for hourly updates
-        // You will need to either wait or manually trigger a data update and compare with previous value.
-        String expectedText = "Last data update: " + getLastHourTimestamp(); // You'll need to define `getLastHourTimestamp()`
+        // Format the expected timestamp to match the application's update frequency
+        String expectedText = "Last data update: " + getLastHourTimestamp();
 
         Assert.assertTrue(lastDataTimestamp.contains(expectedText), "Data is not updated hourly.");
     }
 
     @Test
     public void testAppStartsSuccessfully() {
-        // Test if an essential element (e.g., login form) is present on the home page
+        // Verify if the login form is visible on the page
         boolean isLoginFormVisible = driver.findElement(By.id("login-form")).isDisplayed();
-        Assert.assertTrue(isLoginFormVisible, "The app did not start correctly.");
+        Assert.assertTrue(isLoginFormVisible, "Login form is not visible. The app may not have started correctly.");
     }
 
     @AfterClass
     public void tearDown() {
-        // Close the browser after the tests
-        driver.quit();
+        // Quit the browser after tests
+        if (driver != null) {
+            driver.quit();
+        }
     }
 
-    // Helper method to get the current hour formatted (you can adjust this to your needs)
+    // Helper method to get the previous hour timestamp in the required format
     private String getLastHourTimestamp() {
-        // Return the formatted timestamp for the previous hour
+        // Format the timestamp as "yyyy-MM-dd HH:00:00"
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:00:00");
-        java.util.Date date = new java.util.Date(System.currentTimeMillis() - 60 * 60 * 1000); // subtract 1 hour
+        java.util.Date date = new java.util.Date(System.currentTimeMillis() - 60 * 60 * 1000); // Subtract 1 hour
         return sdf.format(date);
     }
 }
