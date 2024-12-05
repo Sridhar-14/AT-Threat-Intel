@@ -7,7 +7,7 @@ pipeline {
                 git 'https://github.com/Sridhar-14/AT-Threat-Intel.git'
             }
         }
-        
+
         stage('Build Docker Image') {
             steps {
                 script {
@@ -17,7 +17,16 @@ pipeline {
                 }
             }
         }
-        
+
+        stage('Run Selenium Tests') {
+            steps {
+                script {
+                    // Run Maven test to trigger Selenium tests (ensure TestNG is set up in your Maven configuration)
+                    sh "'${tool 'Maven 3.9.9'}/bin/mvn' test"
+                }
+            }
+        }
+
         stage('Run Application in Docker') {
             steps {
                 script {

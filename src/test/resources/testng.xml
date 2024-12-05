@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<suite name="Application Tests">
+    <test name="Test App Functionality">
+        <classes>
+            <class name="com.example.ApplicationTest"/> <!-- Replace with your actual class name -->
+        </classes>
+    </test>
+</suite>
